@@ -1,18 +1,8 @@
 // SPDX-License-Identifier: BSD-2-Clause
 pragma solidity ^0.8.22;
 
-// Billing contract provides billing account for users.
-// Users deposit to and withdraw from their billing account.
-// Receive and fallback are aliases to deposit.
-// Owner charges from each account.
-// Owner can propose new owner to transfer the ownership.
-// Proposed new owner can accept the ownership.
-contract Billing {
-    mapping(address => uint) accounts;
-
-    function balance(address user) public view returns (uint) {
-        return accounts[user];
-    }
+contract BillingAccount {
+    mapping(address => uint) public accounts;
 
     function deposit() public payable {
         accounts[msg.sender] += msg.value;
