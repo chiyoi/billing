@@ -22,34 +22,28 @@ contract BillingAccount {
         require(ok, "Failed to send Ether");
     }
 
-    address public owner;
+    mapping(address => bool) public owners;
 
     constructor() {
-        owner = msg.sender;
+        owners[msg.sender] = true;
     }
 
     modifier privileged() {
-        require(msg.sender == owner, "Privileged function");
+        require(owners[msg.sender], "Privileged function");
         _;
     }
 
-    event Charged(string invoice);
-
-    function charge(address user, uint amount, string calldata invoice) public privileged {
+    function charge(address user, uint amount) public privileged {
         balance[user] -= amount;
         (bool ok, ) = msg.sender.call{value: amount}("");
         require(ok, "Failed to send Ether");
-        emit Charged(invoice);
     }
 
-    address public proposedNewOwner;
-
-    function proposeNewOwner(address newOwner) public privileged {
-        proposedNewOwner = newOwner;
+    function addOwner(address owner) public privileged {
+        owners[owner] = true;
     }
 
-    function acceptOwnership() public {
-        require(msg.sender == proposedNewOwner, "Not the proposed owner");
-        owner = proposedNewOwner;
+    function removeOwner(address owner) public privileged {
+        delete owners[owner];
     }
 }
