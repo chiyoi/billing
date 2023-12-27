@@ -2,22 +2,22 @@
 pragma solidity ^0.8.22;
 
 contract BillingAccount {
-    mapping(address => uint) public accounts;
+    mapping(address => uint) public balance;
 
     function deposit() public payable {
-        accounts[msg.sender] += msg.value;
+        balance[msg.sender] += msg.value;
     }
 
     receive() external payable {
-        accounts[msg.sender] += msg.value;
+        balance[msg.sender] += msg.value;
     }
 
     fallback() external payable {
-        accounts[msg.sender] += msg.value;
+        balance[msg.sender] += msg.value;
     }
 
     function withdraw(uint amount) public {
-        accounts[msg.sender] -= amount;
+        balance[msg.sender] -= amount;
         (bool ok, ) = msg.sender.call{value: amount}("");
         require(ok, "Failed to send Ether");
     }
@@ -36,7 +36,7 @@ contract BillingAccount {
     event Charged(string invoice);
 
     function charge(address user, uint amount, string calldata invoice) public privileged {
-        accounts[user] -= amount;
+        balance[user] -= amount;
         (bool ok, ) = msg.sender.call{value: amount}("");
         require(ok, "Failed to send Ether");
         emit Charged(invoice);
