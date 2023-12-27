@@ -6,7 +6,7 @@ Billing contracts for Neko03 services.
 BillingAccount provides billing accounts for users.\
 Users may deposit to and withdraw from their billing account.\
 Owners may charge from each account.\
-Owners may modify the owners set (add or remove).
+Owners may grant or revoke the ownership of any other owner.
 
 Receive and fallback are aliases to deposit.
 
